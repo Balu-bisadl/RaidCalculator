@@ -7,6 +7,10 @@ public enum Resources_names
 {
     explosive_bullet, rocket, C4, satchel, beancan, sulfur, charcoal, gunpowder, explosives, lowgradefuel, frags, pipe, rope, stash, techparts, cloth, propane_bomb,propane
 }
+public enum Constructions_names
+{
+    wooden_wall, stone_wall,metal_wall,hqm_wall, metal_door, metal_double_door, hqm_door, hqm_double_door, wooden_door, wooden_double_door, high_wooden_wall,high_stone_wall,garage_door,shopfront,window,armored_window,metal_bars,wooden_bars,fence_wall,fence_gate,cell,barricade
+}
 [Serializable]
 public class ResourceSettings
 {

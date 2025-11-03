@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform LastResultContent;
     Selecteditem[] ItemsForCalculate;
     Resources_names resource_name;
+    Constructions_names construction_name;
     public List<Selecteditem> selecteditems = new List<Selecteditem>();
     int item_count;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -63,6 +64,10 @@ public class UIManager : MonoBehaviour
             Exchangebuttons(true);
             
         }
+    }
+    public void Construction_item_change(Image buttonimage,Constructions_names construction)
+    {
+        construction_name =  construction;
     }
     public void Button_item_change(Image buttonimage,Resources_names resource)
     {
