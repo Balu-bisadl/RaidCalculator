@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class Counstuctionitem : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] public Resources_names resource_name;
+    [SerializeField] public Constructions_names construction_name;
     [SerializeField] Image image;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        FindObjectOfType<UIManager>().Button_item_change(image, resource_name);
+        FindObjectOfType<UIManager>().Button_construction_change(image, construction_name);
     }
 }

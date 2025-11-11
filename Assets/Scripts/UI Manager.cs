@@ -20,10 +20,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform CalculatePanelContent;
     [SerializeField] GameObject BaseItemPanelprefab;
     [SerializeField] Transform LastResultContent;
+    [Header ("Конструкции")]
+    [SerializeField] GameObject Selectedconstruction_prefab;
+    [SerializeField] GameObject Selectedpanel_constructions;
     Selecteditem[] ItemsForCalculate;
     Resources_names resource_name;
     Constructions_names construction_name;
-    public List<Selecteditem> selecteditems = new List<Selecteditem>();
+    [HideInInspector]public List<Selecteditem> selecteditems = new List<Selecteditem>();
+    [HideInInspector]public List<Selectedconstruction> selectedconstructions = new List<Selectedconstruction>();
     int item_count;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -65,9 +69,10 @@ public class UIManager : MonoBehaviour
             
         }
     }
-    public void Construction_item_change(Image buttonimage,Constructions_names construction)
+    public void Button_construction_change(Image buttonimage,Constructions_names construction)
     {
         construction_name =  construction;
+        Choose_image.sprite = buttonimage.sprite;
     }
     public void Button_item_change(Image buttonimage,Resources_names resource)
     {
@@ -90,18 +95,31 @@ public class UIManager : MonoBehaviour
         if (Item_count_input != null)
             Item_count_input.onValueChanged.RemoveListener(OnInputChanged);
     }
-    public void AddButton()
+    public void AddButton(bool is_boom_menu)
     {
         if (item_count > 0)
         {
-            GameObject selecteditem = Instantiate(Selecteditem_prefab, Selectedpanel.transform);
-            selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name);
-            CalculateButtonActivator();
+            if (is_boom_menu)
+            {
+
+                GameObject selecteditem = Instantiate(Selecteditem_prefab, Selectedpanel.transform);
+                selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name);
+                CalculateButtonActivator();
+            }
+            else
+            {
+                GameObject selected_construction = Instantiate(Selectedconstruction_prefab, Selectedpanel_constructions.transform);
+
+            }
         }
     }
     public void Selecteditemchoosed()
     {
         Change_button.interactable = true;    
+    }
+    public void Selectedconstructionchoosed()
+    {
+
     }
     public void Exchangebuttons(bool addactivate)
     {
