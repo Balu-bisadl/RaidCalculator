@@ -23,12 +23,17 @@ public class UIManager : MonoBehaviour
     [Header ("Конструкции")]
     [SerializeField] GameObject Selectedconstruction_prefab;
     [SerializeField] GameObject Selectedpanel_constructions;
+    [SerializeField] Button Add_construction_button;
+    [SerializeField] Button Change_construction_button;
+    [SerializeField] Button Calculate_construction_button;
+    [SerializeField] Button Delete_construction_button;
     Selecteditem[] ItemsForCalculate;
     Resources_names resource_name;
     Constructions_names construction_name;
     [HideInInspector]public List<Selecteditem> selecteditems = new List<Selecteditem>();
     [HideInInspector]public List<Selectedconstruction> selectedconstructions = new List<Selectedconstruction>();
     int item_count;
+    [HideInInspector] public bool is_boom_menu;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -95,7 +100,7 @@ public class UIManager : MonoBehaviour
         if (Item_count_input != null)
             Item_count_input.onValueChanged.RemoveListener(OnInputChanged);
     }
-    public void AddButton(bool is_boom_menu)
+    public void AddButton()
     {
         if (item_count > 0)
         {
@@ -109,7 +114,8 @@ public class UIManager : MonoBehaviour
             else
             {
                 GameObject selected_construction = Instantiate(Selectedconstruction_prefab, Selectedpanel_constructions.transform);
-
+                selected_construction.GetComponent<Selectedconstruction>().Inetialize(item_count, Choose_image.sprite, construction_name);
+                CalculateButtonActivator();
             }
         }
     }
@@ -172,13 +178,27 @@ public class UIManager : MonoBehaviour
     }
     void CalculateButtonActivator()
     {
-        if (Selectedpanel.transform.childCount == 0)
-        {
-            Calculate_button.interactable = false;
+        if (is_boom_menu)
+        { 
+            if (Selectedpanel.transform.childCount == 0)
+            {
+                Calculate_button.interactable = false;
+            }
+            else
+            {
+                Calculate_button.interactable = true;
+            }
         }
         else
         {
-            Calculate_button.interactable = true;
+            if (Selectedpanel_constructions.transform.childCount == 0)
+            {
+                Calculate_construction_button.interactable = false;
+            }
+            else
+            {
+                Calculate_construction_button.interactable = true;
+            }
         }
     }
     public void Delete_selected_itembutton()
