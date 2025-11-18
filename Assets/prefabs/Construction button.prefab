@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4707912873398910637}
   - component: {fileID: 8096452175568916201}
   - component: {fileID: 3921970430928447589}
+  - component: {fileID: 6303017438703905489}
   m_Layer: 5
   m_Name: Construction button
   m_TagString: Untagged
@@ -142,6 +143,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &6303017438703905489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663470583090220907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61afa07957d288148b60bfb3d1a3e8d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Counstuctionitem
+  construction_name: 0
+  image: {fileID: 4938063144690456368}
 --- !u!1 &1684988876524303402
 GameObject:
   m_ObjectHideFlags: 0

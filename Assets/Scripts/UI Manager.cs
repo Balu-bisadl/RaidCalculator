@@ -20,19 +20,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform CalculatePanelContent;
     [SerializeField] GameObject BaseItemPanelprefab;
     [SerializeField] Transform LastResultContent;
+
     [Header ("Конструкции")]
+
+    [SerializeField] InputField Construction_count_input;
     [SerializeField] GameObject Selectedconstruction_prefab;
     [SerializeField] GameObject Selectedpanel_constructions;
     [SerializeField] Button Add_construction_button;
     [SerializeField] Button Change_construction_button;
     [SerializeField] Button Calculate_construction_button;
     [SerializeField] Button Delete_construction_button;
+    [SerializeField] Image Choose_construction_image;
     Selecteditem[] ItemsForCalculate;
     Resources_names resource_name;
     Constructions_names construction_name;
     [HideInInspector]public List<Selecteditem> selecteditems = new List<Selecteditem>();
     [HideInInspector]public List<Selectedconstruction> selectedconstructions = new List<Selectedconstruction>();
     int item_count;
+    int construction_count;
+   
     [HideInInspector] public bool is_boom_menu;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -45,13 +51,19 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("Inputfield ?? ????????");
         }
+        if (Construction_count_input != null)
+        {
+            Construction_count_input.onValueChanged.AddListener(OnInputChanged);
+        }
         CalculateButtonActivator();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         Checkitemcountinputactive();
+        Checkconstructioncountinputactive();
         Selecteditem selecteditem = Findactiveselecteditem();
         if (selecteditem != null)
         {
@@ -74,10 +86,18 @@ public class UIManager : MonoBehaviour
             
         }
     }
+    void Checkconstructioncountinputactive()
+    {
+        if (Construction_count_input.isFocused)
+        {
+            Exchangebuttons(true);
+
+        }
+    }
     public void Button_construction_change(Image buttonimage,Constructions_names construction)
     {
         construction_name =  construction;
-        Choose_image.sprite = buttonimage.sprite;
+        Choose_construction_image.sprite = buttonimage.sprite;
     }
     public void Button_item_change(Image buttonimage,Resources_names resource)
     {
@@ -88,7 +108,14 @@ public class UIManager : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(newText) && newText.All(char.IsDigit))
         {
-            item_count= int.Parse(newText);
+            if (is_boom_menu)
+            {
+                item_count = int.Parse(newText);
+            }
+            else
+            {
+                construction_count = int.Parse(newText);
+            }
         }
         else
         {
@@ -99,22 +126,26 @@ public class UIManager : MonoBehaviour
     {
         if (Item_count_input != null)
             Item_count_input.onValueChanged.RemoveListener(OnInputChanged);
+        if (Construction_count_input != null)
+            Construction_count_input.onValueChanged.RemoveListener(OnInputChanged);
     }
     public void AddButton()
     {
-        if (item_count > 0)
+        if (is_boom_menu)
         {
-            if (is_boom_menu)
+            if (item_count > 0)
             {
-
                 GameObject selecteditem = Instantiate(Selecteditem_prefab, Selectedpanel.transform);
                 selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name);
                 CalculateButtonActivator();
             }
-            else
+        }
+        else
+        {
+            if (construction_count > 0)
             {
                 GameObject selected_construction = Instantiate(Selectedconstruction_prefab, Selectedpanel_constructions.transform);
-                selected_construction.GetComponent<Selectedconstruction>().Inetialize(item_count, Choose_image.sprite, construction_name);
+                selected_construction.GetComponent<Selectedconstruction>().Inetialize(construction_count, Choose_construction_image.sprite, construction_name);
                 CalculateButtonActivator();
             }
         }
