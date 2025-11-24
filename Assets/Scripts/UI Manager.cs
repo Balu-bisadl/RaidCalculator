@@ -30,7 +30,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] Button Change_construction_button;
     [SerializeField] Button Calculate_construction_button;
     [SerializeField] Button Delete_construction_button;
+    [SerializeField] Button Delete_all_construction_button;
     [SerializeField] Image Choose_construction_image;
+    [SerializeField] GameObject PanelConstructionChange;
+    [SerializeField] InputField PanelChangeConstructionInput;
     Selecteditem[] ItemsForCalculate;
     Resources_names resource_name;
     Constructions_names construction_name;
@@ -65,6 +68,7 @@ public class UIManager : MonoBehaviour
         Checkitemcountinputactive();
         Checkconstructioncountinputactive();
         Selecteditem selecteditem = Findactiveselecteditem();
+        Selectedconstruction selectedconstruction = Findactiveselectedconstruction();
         if (selecteditem != null)
         {
             Delete_button.gameObject.SetActive(true);
@@ -74,6 +78,16 @@ public class UIManager : MonoBehaviour
         {
             Delete_button.gameObject.SetActive(false);
             Delete_all_button.gameObject.SetActive(true);
+        }
+        if (selectedconstruction != null)
+        {
+            Delete_construction_button.gameObject.SetActive(true);
+            Delete_all_construction_button.gameObject.SetActive(false);
+        }
+        else
+        {
+            Delete_construction_button.gameObject.SetActive(false);
+            Delete_all_construction_button.gameObject.SetActive(true);
         }
 
     }
@@ -90,7 +104,7 @@ public class UIManager : MonoBehaviour
     {
         if (Construction_count_input.isFocused)
         {
-            Exchangebuttons(true);
+            Exchangebuttonsconstruction(true);
 
         }
     }
@@ -156,7 +170,27 @@ public class UIManager : MonoBehaviour
     }
     public void Selectedconstructionchoosed()
     {
-
+        Change_construction_button.interactable = true;
+    }
+    public void Exchangebuttonsconstruction(bool addactivate)
+    {
+        if (addactivate)
+        {
+            Change_construction_button.gameObject.SetActive(false);
+            Add_construction_button.gameObject.SetActive(true);
+            foreach (var item in selectedconstructions)
+            {
+                if (item.isactive)
+                {
+                    item.activateOrdisactivate(false);
+                }
+            }
+        }
+        else
+        {
+            Change_construction_button.gameObject.SetActive(true);
+            Add_construction_button.gameObject.SetActive(false);
+        }
     }
     public void Exchangebuttons(bool addactivate)
     {
@@ -182,12 +216,24 @@ public class UIManager : MonoBehaviour
     {
         PanelChange.SetActive(on);
     }
+    public void ChangePanelconstructionactivator(bool on)
+    {
+        PanelConstructionChange.SetActive(on);
+    }
     public void Changepanel_Buttonaccept()
     {
         Selecteditem item  = Findactiveselecteditem();
         if (item != null)
         {
             item.Itemcount = int.Parse(PanelChangeInput.text);
+        }
+    }
+    public void Changepanel_Buttonconstructionaccept()
+    {
+        Selectedconstruction item = Findactiveselectedconstruction();
+        if (item != null)
+        {
+            item.Constructioncount = int.Parse(PanelChangeConstructionInput.text);
         }
     }
     Selecteditem Findactiveselecteditem()
@@ -201,11 +247,28 @@ public class UIManager : MonoBehaviour
         }
         return null;
     }
+    Selectedconstruction Findactiveselectedconstruction()
+    {
+        foreach (Selectedconstruction construction in selectedconstructions)
+        {
+            if (construction.isactive)
+            {
+                return construction;
+            }
+        }
+        return null;
+    }
     void Destroy_selected_item(Selecteditem item )
     {
         Destroy(item.gameObject);
         Exchangebuttons(true);
         Invoke("CalculateButtonActivator", 0.01f);
+    }
+    void Destroy_selected_construction(Selectedconstruction construction)
+    {
+        Destroy(construction.gameObject);
+        Exchangebuttonsconstruction(true);
+        Invoke("CalculateButtonActivator", 0.01f); 
     }
     void CalculateButtonActivator()
     {
@@ -237,6 +300,11 @@ public class UIManager : MonoBehaviour
         Destroy_selected_item(Findactiveselecteditem());
         PanelChangeInput.text = "";
     }
+    public void Delete_selected_constructionbutton()
+    {
+        Destroy_selected_construction(Findactiveselectedconstruction());
+        PanelChangeInput.text = "";
+    }
     public void Change_selected_itembutton()
     {
         int count = int.Parse(PanelChangeInput.text);
@@ -248,11 +316,29 @@ public class UIManager : MonoBehaviour
         }
         Exchangebuttons(true);
     }
+    public void Change_selected_constructionbutton()
+    {
+        int count = int.Parse(PanelChangeConstructionInput.text);
+        PanelChangeConstructionInput.text = "";
+        Selectedconstruction item = Findactiveselectedconstruction();
+        if (item != null)
+        {
+            item.Constructioncount = count;
+        }
+        Exchangebuttonsconstruction(true);
+    }
     public void Destroy_all()
     {
         foreach (Selecteditem item in selecteditems)
         {
             Destroy_selected_item(item);
+        }
+    }
+    public void Destroy_all_construction()
+    {
+        foreach (Selectedconstruction construction in selectedconstructions)
+        {
+            Destroy_selected_construction(construction);
         }
     }
     public void Calculate()

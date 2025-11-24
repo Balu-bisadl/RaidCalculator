@@ -62,10 +62,10 @@ public class Selectedconstruction : MonoBehaviour, IPointerClickHandler
     }
     public void Inetialize(int count, Sprite image, Constructions_names construction)
     {
-        constructioncount = count;
+        Constructioncount = count;
         constructionimage = image;
         construction_name = construction;
-        selected_construction_image.sprite = image;
+        Selected_construction_image.sprite = image;
         manager = FindObjectOfType<UIManager>();
         manager.selectedconstructions.Add(this);
     }
@@ -82,11 +82,11 @@ public class Selectedconstruction : MonoBehaviour, IPointerClickHandler
         activateOrdisactivate(!isactive);
         if (isactive)
         {
-            manager.Exchangebuttons(false); // не изменено
+            manager.Exchangebuttonsconstruction(false); 
         }
         else
         {
-            manager.Exchangebuttons(true);// не изменено
+            manager.Exchangebuttonsconstruction(true);
         }
     }
     void OnDestroy()
