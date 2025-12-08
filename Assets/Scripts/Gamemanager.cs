@@ -19,11 +19,20 @@ public class ResourceSettings
     public int minstack = 1;
     //������� ������� ���������� ������� �� ������� ((n//minstack)+1) x minstack, ���� n �� ������� ������ �� �������
 }
+[Serializable]
+public class ConstructionSettings
+{
+    public Constructions_names constructions_name;
+    public Sprite construction_image;
+    
+    //������� ������� ���������� ������� �� ������� ((n//minstack)+1) x minstack, ���� n �� ������� ������ �� �������
+}
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager instance;
     public Dictionary<Resources_names, Dictionary<Resources_names, int>> resources_dict = new Dictionary<Resources_names, Dictionary<Resources_names, int>>();
     [SerializeField] public List<ResourceSettings> resources_settings;
+    [SerializeField] public List<ConstructionSettings> constructions_settings;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -88,6 +97,18 @@ public class Gamemanager : MonoBehaviour
             if (pair.resources_name == resource_name)
             {
                 return pair.resource_image;
+            }
+        }
+        print("���������� ����������� ��� �������");
+        return null;
+    }
+    public Sprite Get_sprite_for_construction(Constructions_names construction_name)
+    {
+        foreach (var pair in constructions_settings)
+        {
+            if (pair.constructions_name == construction_name)
+            {
+                return pair.construction_image;
             }
         }
         print("���������� ����������� ��� �������");
