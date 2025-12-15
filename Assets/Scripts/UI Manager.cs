@@ -365,44 +365,16 @@ public class UIManager : MonoBehaviour
         {
             Destroy(construction.gameObject);
         }
-        var all_constructions_dict = new Dictionary<Constructions_names, int>();
+        /*var all_constructions_dict = new Dictionary<Constructions_names, int>();
         for (int i = 0; i < ConstructionsForCalculate.Length; i++)
         {
             int constructioncount = ConstructionsForCalculate[i].Constructioncount;
             print(constructioncount);
             Constructions_names construction_name = ConstructionsForCalculate[i].Construction_name;
-         /*  Image construction_image = ConstructionsForCalculate[i].Selected_construction_image;
-            GameObject CalculateConstructionPanel = Instantiate(CalculateConstructionPanelPrefab, CalculatePanelContent);
-            ChoosedElementPanel choosed_element_panel = CalculateConstructionPanel.GetComponent<ChoosedElementPanel>();
-            choosed_element_panel.SetElementPanel(construction_name, constructioncount, construction_image);
-            if (choosed_element_panel.panel_is_disactive == false)
-            {
-                var Current_item_simple_resources = choosed_element_panel.simple_resources;
-
-
-                int main_item_minstack = Gamemanager.instance.Get_minstak_for_resource(resource_name);
-                int mod = itemcount % main_item_minstack;
-                if (mod != 0)
-                {
-                    int n = itemcount / main_item_minstack;
-                    itemcount = (n + 1) * main_item_minstack;
-                }
-
-                foreach (var item in Current_item_simple_resources)
-                {
-                    if (all_simple_resources_dict.ContainsKey(item.Key))
-                    {
-                        all_simple_resources_dict[item.Key] += item.Value * itemcount / main_item_minstack;
-                    }
-                    else
-                    {
-                        all_simple_resources_dict[item.Key] = item.Value * itemcount / main_item_minstack;
-                    }
-                }
-            } */
-         all_constructions_dict[construction_name] = constructioncount;
+            all_constructions_dict[construction_name] = constructioncount;
         }
-        CreateChoosedConstructionsPanel(all_constructions_dict);
+        CreateChoosedConstructionsPanel(all_constructions_dict);*/
+        CreateChoosedConstructionsPanel(ConstructionsForCalculate);
     }
     void CreateResourcePanelsForCalculate()
     {
@@ -450,20 +422,20 @@ public class UIManager : MonoBehaviour
     // Запустить создание панелей с базовыми ресурсами на основе all_simple_resources_dict
         CreateSimpleResourcePanels(all_simple_resources_dict);
     }
-    void CreateChoosedConstructionsPanel(Dictionary<Constructions_names, int> Constructions_dict)
+    void CreateChoosedConstructionsPanel(Selectedconstruction[] ConstructionsForCalculate)
     {
         for (int i = 0; i < LastResultConstructionsContent.childCount; i++)
         {
             Destroy(LastResultConstructionsContent.GetChild(i).gameObject);
         }
-        foreach (var construction in Constructions_dict)
+        foreach (Selectedconstruction construction in ConstructionsForCalculate)
         {
-            int construction_count = construction.Value;
-            Constructions_names construction_name = construction.Key;
+            int construction_count = construction.Constructioncount;
+            Constructions_names construction_name = construction.Construction_name;
             print(construction_name);
             Sprite construction_image = Gamemanager.instance.Get_sprite_for_construction(construction_name);
             GameObject constructionpanel = Instantiate(BaseConstructionPanelprefab, LastResultConstructionsContent);
-            constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count); // Доделать
+            constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count,construction_name); // Доделать
         }
     }
     void CreateSimpleResourcePanels(Dictionary<Resources_names, int> Resources_dict)

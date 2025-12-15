@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 6545612368727657590}
   - component: {fileID: 4059631787283118411}
   - component: {fileID: 7540115376421680738}
-  - component: {fileID: 6657626194129336281}
   - component: {fileID: 6699375576684868406}
   m_Layer: 5
   m_Name: Choosed construction panel
@@ -178,24 +177,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &6657626194129336281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4307389830119394573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b90a083e4df34248b5d6f42367334cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ChoosedConstructionPanel
-  construction_image: {fileID: 6309078221399712959}
-  construction_count_text: {fileID: 5018913793930464052}
-  Button_disactivation_image: {fileID: 3634145921856471505}
-  construction_name: 0
-  construction_count: 0
-  panel_is_disactive: 0
 --- !u!114 &6699375576684868406
 MonoBehaviour:
   m_ObjectHideFlags: 0

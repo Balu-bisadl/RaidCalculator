@@ -24,6 +24,7 @@ public class ConstructionSettings
 {
     public Constructions_names constructions_name;
     public Sprite construction_image;
+    public int constructionhp;
     
     //������� ������� ���������� ������� �� ������� ((n//minstack)+1) x minstack, ���� n �� ������� ������ �� �������
 }
