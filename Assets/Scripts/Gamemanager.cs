@@ -1,5 +1,7 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +12,19 @@ public enum Resources_names
 public enum Constructions_names
 {
     wooden_wall, stone_wall,metal_wall,hqm_wall, metal_door, metal_double_door, hqm_door, hqm_double_door, wooden_door, wooden_double_door, high_wooden_wall,high_stone_wall,garage_door,shopfront,window,armored_window,metal_bars,wooden_bars,fence_wall,fence_gate,cell,barricade
+}
+[Serializable]
+public class WeaponForConstruction
+{
+    public Resources_names weapon_name;
+    public float weapon_damage;
+}
+[Serializable] 
+public class WeaponSettings
+{
+    public Resources_names weapon_name;
+    public Sprite weapon_image;
+    public float weapon_damage;
 }
 [Serializable]
 public class ResourceSettings
@@ -24,7 +39,8 @@ public class ConstructionSettings
 {
     public Constructions_names constructions_name;
     public Sprite construction_image;
-    public int constructionhp;
+    public float constructionhp;
+    public List<WeaponForConstruction> weaponsforconstruction = new List<WeaponForConstruction>();
     
     //������� ������� ���������� ������� �� ������� ((n//minstack)+1) x minstack, ���� n �� ������� ������ �� �������
 }
@@ -34,6 +50,7 @@ public class Gamemanager : MonoBehaviour
     public Dictionary<Resources_names, Dictionary<Resources_names, int>> resources_dict = new Dictionary<Resources_names, Dictionary<Resources_names, int>>();
     [SerializeField] public List<ResourceSettings> resources_settings;
     [SerializeField] public List<ConstructionSettings> constructions_settings;
+    [SerializeField] public List<WeaponSettings> weapon_settings;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -167,6 +184,23 @@ public class Gamemanager : MonoBehaviour
             }
         }
         return result;
+    }
+    public void CalculateweaponsforDestroy(Constructions_names construction, int construction_count)
+    {
+        foreach (ConstructionSettings constructionSetting in constructions_settings)
+        {
+            if (constructionSetting.constructions_name == construction)
+            {
+                float constructionhp = constructionSetting.constructionhp;
+                List<WeaponForConstruction> weaponsforconstructionsorted = WeaponsForConstructionSorting(constructionSetting.weaponsforconstruction);
+
+            }    
+        }
+    }
+    List<WeaponForConstruction> WeaponsForConstructionSorting(List<WeaponForConstruction> weaponsforconstruction)
+    {
+        List<WeaponForConstruction> SortedList = weaponsforconstruction.OrderBy(w=>w.weapon_damage).ToList();
+        return SortedList;
     }
     // Update is called once per frame
     void Update()

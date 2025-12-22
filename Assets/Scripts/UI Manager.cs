@@ -436,6 +436,7 @@ public class UIManager : MonoBehaviour
             Sprite construction_image = Gamemanager.instance.Get_sprite_for_construction(construction_name);
             GameObject constructionpanel = Instantiate(BaseConstructionPanelprefab, LastResultConstructionsContent);
             constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count,construction_name); // Доделать
+
         }
     }
     void CreateSimpleResourcePanels(Dictionary<Resources_names, int> Resources_dict)
