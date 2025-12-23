@@ -185,17 +185,42 @@ public class Gamemanager : MonoBehaviour
         }
         return result;
     }
-    public void CalculateweaponsforDestroy(Constructions_names construction, int construction_count)
+    //Это функция определения всех типов и количества оружия для уничтожения конструкции
+    public Dictionary<WeaponForConstruction, int> CalculateweaponsforDestroy(Constructions_names construction, int construction_count)
     {
+        Dictionary<WeaponForConstruction, int> weaponsfordestroy = new Dictionary<WeaponForConstruction, int>();
+        // формирования списка оружия для уничтожения конструкции 
         foreach (ConstructionSettings constructionSetting in constructions_settings)
         {
             if (constructionSetting.constructions_name == construction)
             {
-                float constructionhp = constructionSetting.constructionhp;
-                List<WeaponForConstruction> weaponsforconstructionsorted = WeaponsForConstructionSorting(constructionSetting.weaponsforconstruction);
-
-            }    
+                float constructionhp = constructionSetting.constructionhp; // определяем хп кострукции 
+                List<WeaponForConstruction> weaponsforconstructionsorted = WeaponsForConstructionSorting(constructionSetting.weaponsforconstruction); // сортировка оружия по возрастанию урона
+                int weaponindex = weaponsforconstructionsorted.Count-1; // выбираем оружие с наибольшим уроном
+                while (constructionhp > 0)
+                {
+                    // если при нанесении урона данным оружием приведет к избыточному урону то переключаемся на тип оружия с меньшим урном(если это не слабейшее оружие)
+                    if (constructionhp - weaponsforconstructionsorted[weaponindex].weapon_damage<0)
+                    {
+                        if (weaponindex!= 0)
+                        {
+                            weaponindex -= 1;
+                        }
+                        else
+                        {
+                            constructionhp -= weaponsforconstructionsorted[weaponindex].weapon_damage;
+                            // добавить оружие в словарь
+                        }
+                    }
+                    else // наносим урон данный типом оружия
+                    {
+                        constructionhp -= weaponsforconstructionsorted[weaponindex].weapon_damage;
+                        // добавить оружие в словарь 
+                    }
+                }
+            }  
         }
+        return weaponsfordestroy;
     }
     List<WeaponForConstruction> WeaponsForConstructionSorting(List<WeaponForConstruction> weaponsforconstruction)
     {
