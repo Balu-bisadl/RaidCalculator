@@ -210,12 +210,29 @@ public class Gamemanager : MonoBehaviour
                         {
                             constructionhp -= weaponsforconstructionsorted[weaponindex].weapon_damage;
                             // добавить оружие в словарь
+                            if (weaponsfordestroy.ContainsKey(weaponsforconstructionsorted[weaponindex]))
+                            {
+                                weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += 1;
+                            }
+                            else
+                            {
+                                weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], 1);
+                            }
                         }
                     }
                     else // наносим урон данный типом оружия
                     {
                         constructionhp -= weaponsforconstructionsorted[weaponindex].weapon_damage;
                         // добавить оружие в словарь 
+                        if (weaponsfordestroy.ContainsKey(weaponsforconstructionsorted[weaponindex]))
+                        {
+                            weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += 1;
+                        }
+                        else
+                        {
+                            weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], 1);
+                        }
+
                     }
                 }
             }  
