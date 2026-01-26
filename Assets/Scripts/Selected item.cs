@@ -60,14 +60,21 @@ public class Selecteditem : MonoBehaviour, IPointerClickHandler
             selected_item_image = value;
         }
     }
-    public void Inetialize (int count,Sprite image, Resources_names resource)
+    public void Inetialize(int count, Sprite image, Resources_names resource, bool isweaponpanel)
     {
         Itemcount = count;
         itemimage = image;
-        resource_name = resource; 
+        resource_name = resource;
         selected_item_image.sprite = image;
         manager = FindObjectOfType<UIManager>();
+        if (isweaponpanel)  
+        { 
         manager.selecteditems.Add(this);
+        }
+        else
+        {
+             //eсли находимся в меню расчета конструкций
+        }
     }
     public void OnPointerClick(PointerEventData eventData)
     {

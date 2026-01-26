@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform LastResultConstructionsContent;
     [SerializeField] GameObject BaseConstructionPanelprefab;
     [SerializeField] GameObject CalculateConstructionPanelPrefab;
+    [SerializeField] Transform PanelWeaponsForAllConstructionsDestroy;
     Selecteditem[] ItemsForCalculate;
     Selectedconstruction[] ConstructionsForCalculate;
     Resources_names resource_name;
@@ -154,7 +155,7 @@ public class UIManager : MonoBehaviour
             if (item_count > 0)
             {
                 GameObject selecteditem = Instantiate(Selecteditem_prefab, Selectedpanel.transform);
-                selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name);
+                selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name,true);
                 CalculateButtonActivator();
             }
         }
@@ -365,15 +366,6 @@ public class UIManager : MonoBehaviour
         {
             Destroy(construction.gameObject);
         }
-        /*var all_constructions_dict = new Dictionary<Constructions_names, int>();
-        for (int i = 0; i < ConstructionsForCalculate.Length; i++)
-        {
-            int constructioncount = ConstructionsForCalculate[i].Constructioncount;
-            print(constructioncount);
-            Constructions_names construction_name = ConstructionsForCalculate[i].Construction_name;
-            all_constructions_dict[construction_name] = constructioncount;
-        }
-        CreateChoosedConstructionsPanel(all_constructions_dict);*/
         CreateChoosedConstructionsPanel(ConstructionsForCalculate);
     }
     void CreateResourcePanelsForCalculate()
@@ -434,12 +426,10 @@ public class UIManager : MonoBehaviour
         {
             int construction_count = construction.Constructioncount;
             Constructions_names construction_name = construction.Construction_name;
-            print(construction_name);
             Sprite construction_image = Gamemanager.instance.Get_sprite_for_construction(construction_name);
             GameObject constructionpanel = Instantiate(BaseConstructionPanelprefab, LastResultConstructionsContent);
             constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count,construction_name); // Доделать
             weaponsfordestroy.Add(Gamemanager.instance.CalculateweaponsforDestroy(construction_name,construction_count));
-
         }
         // формирование словаря с типами и количеством оружия для уничтожения всех выбранных конструкций
         Dictionary<WeaponForConstruction, int> weaponsfordestroyallconstructions = new Dictionary<WeaponForConstruction, int>();
@@ -447,18 +437,53 @@ public class UIManager : MonoBehaviour
         {
             foreach(var kvp in weapons)
             {
-                if (weaponsfordestroyallconstructions.ContainsKey(kvp.Key))
+                if (weaponsfordestroyallconstructions.Count > 0)
                 {
-                    weaponsfordestroyallconstructions[kvp.Key] += kvp.Value;
-                }
+                    bool addednewweapon = true;
+                    foreach (var kvp2 in weaponsfordestroyallconstructions)
+                    {
+                        if(kvp.Key.weapon_name == kvp2.Key.weapon_name)
+                        {
+                            weaponsfordestroyallconstructions[kvp2.Key] += kvp.Value;
+                            addednewweapon = false;
+                            break;
+                        }
+                    }
+                    if (addednewweapon)
+                    {
+                        weaponsfordestroyallconstructions[kvp.Key] = kvp.Value;
+                    }
+                }  
                 else
                 {
-                    weaponsfordestroyallconstructions[kvp.Key] = kvp.Value;
+                    weaponsfordestroyallconstructions[kvp.Key] = kvp.Value; 
                 }
             }
         }
-        //Остановились здесь! 
         //По словарю weaponsfordestroyallconstructions создать ячейки с оружием в интерфейсе под валютой
+        foreach(var kvp in weaponsfordestroyallconstructions)
+        {
+            WeaponForConstruction currentweapon = kvp.Key;
+            int currentweaponcount = kvp.Value;
+            Resources_names weaponname = currentweapon.weapon_name;
+            GameObject currentweaponobject = Instantiate(Selecteditem_prefab, PanelWeaponsForAllConstructionsDestroy);
+            Sprite currentweaponsprite = null;
+            foreach (WeaponSettings weaponsetting in Gamemanager.instance.weapon_settings)
+            {
+                if (weaponsetting.weapon_name == weaponname)
+                {
+                    currentweaponsprite = weaponsetting.weapon_image;
+                }
+            }
+            currentweaponobject.GetComponent<Selecteditem>().Inetialize(currentweaponcount, currentweaponsprite, weaponname, true);
+        }
+    }
+    public void ClearPanelWeaponsForAllConstructions()
+    {
+        foreach (Transform weaponfordestroy in PanelWeaponsForAllConstructionsDestroy.transform)
+        {
+            Destroy(weaponfordestroy.gameObject); 
+        }
     }
     void CreateSimpleResourcePanels(Dictionary<Resources_names, int> Resources_dict)
     {

@@ -24,7 +24,6 @@ public class WeaponSettings
 {
     public Resources_names weapon_name;
     public Sprite weapon_image;
-    public float weapon_damage;
 }
 [Serializable]
 public class ResourceSettings
@@ -212,11 +211,11 @@ public class Gamemanager : MonoBehaviour
                             // добавить оружие в словарь
                             if (weaponsfordestroy.ContainsKey(weaponsforconstructionsorted[weaponindex]))
                             {
-                                weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += 1;
+                                weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += construction_count;
                             }
                             else
                             {
-                                weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], 1);
+                                weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], construction_count);
                             }
                         }
                     }
@@ -226,11 +225,11 @@ public class Gamemanager : MonoBehaviour
                         // добавить оружие в словарь 
                         if (weaponsfordestroy.ContainsKey(weaponsforconstructionsorted[weaponindex]))
                         {
-                            weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += 1;
+                            weaponsfordestroy[weaponsforconstructionsorted[weaponindex]] += construction_count;
                         }
                         else
                         {
-                            weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], 1);
+                            weaponsfordestroy.Add(weaponsforconstructionsorted[weaponindex], construction_count);
                         }
 
                     }
