@@ -38,6 +38,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject BaseConstructionPanelprefab;
     [SerializeField] GameObject CalculateConstructionPanelPrefab;
     [SerializeField] Transform PanelWeaponsForAllConstructionsDestroy;
+    [SerializeField] Text CharcoalcountText;
+    [SerializeField] Text SulfurcountText;
     Selecteditem[] ItemsForCalculate;
     Selectedconstruction[] ConstructionsForCalculate;
     Resources_names resource_name;
@@ -46,6 +48,7 @@ public class UIManager : MonoBehaviour
     [HideInInspector]public List<Selectedconstruction> selectedconstructions = new List<Selectedconstruction>();
     int item_count;
     int construction_count;
+    
    
     [HideInInspector] public bool is_boom_menu;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -461,11 +464,32 @@ public class UIManager : MonoBehaviour
             }
         }
         //По словарю weaponsfordestroyallconstructions создать ячейки с оружием в интерфейсе под валютой
-        foreach(var kvp in weaponsfordestroyallconstructions)
+        int Charcoalcount = 0;
+        int Sulfurcount = 0;
+        foreach (var kvp in weaponsfordestroyallconstructions)
         {
             WeaponForConstruction currentweapon = kvp.Key;
             int currentweaponcount = kvp.Value;
             Resources_names weaponname = currentweapon.weapon_name;
+            Dictionary<Resources_names, int> simple_resources = Gamemanager.instance.Get_simple_recources(weaponname);
+            int currentresourceminstack = Gamemanager.instance.Get_minstak_for_resource(weaponname);
+            int factcount = currentweaponcount / currentresourceminstack;
+            if (currentweaponcount % currentresourceminstack != 0)
+            {
+                factcount += 1;
+            }
+            foreach (KeyValuePair<Resources_names, int> res in simple_resources)
+            { 
+               if (res.Key == Resources_names.charcoal)
+                {
+                    Charcoalcount += res.Value*factcount;
+                    //надо учитывать minstack при расчете чтобы не добавлял лишнюю пулю
+                }
+                else if (res.Key == Resources_names.sulfur)
+                {
+                    Sulfurcount += res.Value*factcount;
+                }
+            }
             GameObject currentweaponobject = Instantiate(Selecteditem_prefab, PanelWeaponsForAllConstructionsDestroy);
             Sprite currentweaponsprite = null;
             foreach (WeaponSettings weaponsetting in Gamemanager.instance.weapon_settings)
@@ -477,6 +501,8 @@ public class UIManager : MonoBehaviour
             }
             currentweaponobject.GetComponent<Selecteditem>().Inetialize(currentweaponcount, currentweaponsprite, weaponname, true);
         }
+        CharcoalcountText.text = $"{Charcoalcount}";
+        SulfurcountText.text = $"{Sulfurcount}";
     }
     public void ClearPanelWeaponsForAllConstructions()
     {

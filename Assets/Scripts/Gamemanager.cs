@@ -116,7 +116,6 @@ public class Gamemanager : MonoBehaviour
                 return pair.resource_image;
             }
         }
-        print("���������� ����������� ��� �������");
         return null;
     }
     public Sprite Get_sprite_for_construction(Constructions_names construction_name)
@@ -128,7 +127,6 @@ public class Gamemanager : MonoBehaviour
                 return pair.construction_image;
             }
         }
-        print("���������� ����������� ��� �������");
         return null;
     }
     public int Get_minstak_for_resource(Resources_names resource_name)
@@ -140,7 +138,6 @@ public class Gamemanager : MonoBehaviour
                 return pair.minstack;
             }
         }
-        print("�� ��������� ������������ ������");
         return 0;
     }
     public Dictionary<Resources_names, int> Get_simple_recources(Resources_names resource_name)
