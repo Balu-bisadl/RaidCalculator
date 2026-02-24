@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour
     Constructions_names construction_name;
     [HideInInspector]public List<Selecteditem> selecteditems = new List<Selecteditem>();
     [HideInInspector]public List<Selectedconstruction> selectedconstructions = new List<Selectedconstruction>();
+    [HideInInspector] public Dictionary<WeaponForConstruction, int> weaponsfordestroyallconstructions = new Dictionary<WeaponForConstruction, int>();
     int item_count;
     int construction_count;
     
@@ -362,7 +363,7 @@ public class UIManager : MonoBehaviour
  
     }
 
-    void CreateConstructionPanelsForCalculate()
+    public void CreateConstructionPanelsForCalculate()
     {
         ConstructionsForCalculate = Selectedpanel_constructions.gameObject.GetComponentsInChildren<Selectedconstruction>();
         foreach (Transform construction in CalculatePanelContent)
@@ -371,14 +372,29 @@ public class UIManager : MonoBehaviour
         }
         CreateChoosedConstructionsPanel(ConstructionsForCalculate);
     }
-    void CreateResourcePanelsForCalculate()
+    public void WeaponsForConstructionsDetailButton()
     {
-        ItemsForCalculate = Selectedpanel.gameObject.GetComponentsInChildren<Selecteditem>();
-        foreach (Transform item in CalculatePanelContent.transform)
+        CreateResourcePanelsForCalculate(false);
+    }
+    void CreateResourcePanelsForCalculate(bool isboommenu = true)
+    {
+        if (isboommenu)
         {
-            Destroy(item.gameObject);
+            ItemsForCalculate = Selectedpanel.gameObject.GetComponentsInChildren<Selecteditem>();
+            foreach (Transform item in CalculatePanelContent.transform)
+            {
+                Destroy(item.gameObject);
+            }
         }
-        var all_simple_resources_dict = new Dictionary<Resources_names, int>();
+        else
+        {            
+            ItemsForCalculate = PanelWeaponsForAllConstructionsDestroy.gameObject.GetComponentsInChildren<Selecteditem>();
+            foreach (Transform item in CalculatePanelContent.transform)
+            {
+                Destroy(item.gameObject);
+            }            
+        }
+            var all_simple_resources_dict = new Dictionary<Resources_names, int>();
         for (int i = 0; i < ItemsForCalculate.Length; i++)
         {
             int itemcount = ItemsForCalculate[i].Itemcount;
@@ -435,7 +451,7 @@ public class UIManager : MonoBehaviour
             weaponsfordestroy.Add(Gamemanager.instance.CalculateweaponsforDestroy(construction_name,construction_count));
         }
         // формирование словаря с типами и количеством оружия для уничтожения всех выбранных конструкций
-        Dictionary<WeaponForConstruction, int> weaponsfordestroyallconstructions = new Dictionary<WeaponForConstruction, int>();
+        weaponsfordestroyallconstructions = new Dictionary<WeaponForConstruction, int>();
         foreach (Dictionary<WeaponForConstruction, int> weapons in weaponsfordestroy)
         {
             foreach(var kvp in weapons)

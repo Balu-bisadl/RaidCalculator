@@ -50,11 +50,22 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] public List<ResourceSettings> resources_settings;
     [SerializeField] public List<ConstructionSettings> constructions_settings;
     [SerializeField] public List<WeaponSettings> weapon_settings;
+    public Dictionary<Resources_names, bool> weaponsforconstructionsstate = new Dictionary<Resources_names, bool>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         instance = this;
+        weaponsforconstructionsstate = new Dictionary<Resources_names, bool>
+        {
+            { Resources_names.explosive_bullet,true },
+            { Resources_names.C4,true },
+            { Resources_names.rocket,true },
+            { Resources_names.satchel,true },
+            { Resources_names.beancan,true },
+            { Resources_names.propane_bomb,true },
+        };
+
         resources_dict[Resources_names.explosive_bullet] = new Dictionary<Resources_names, int>
         {
             {Resources_names.sulfur, 10},
@@ -191,7 +202,17 @@ public class Gamemanager : MonoBehaviour
             if (constructionSetting.constructions_name == construction)
             {
                 float constructionhp = constructionSetting.constructionhp; // определяем хп кострукции 
-                List<WeaponForConstruction> weaponsforconstructionsorted = WeaponsForConstructionSorting(constructionSetting.weaponsforconstruction); // сортировка оружия по возрастанию урона
+                // Формирование списка оружия с учетом исключеных типов
+                List<WeaponForConstruction> weaponswithoutblocked = new List<WeaponForConstruction>();
+                foreach (var kvp in weaponsforconstructionsstate)
+                {
+                    if (kvp.Value == true)
+                    {
+                        int index = constructionSetting.weaponsforconstruction.FindIndex(n => n.weapon_name == kvp.Key);
+                        weaponswithoutblocked.Add(constructionSetting.weaponsforconstruction[index]); // данный список необходимо использовать далее для рассчетов, текущую функцию необходимо вызывать повторно при исключении оружия из  подсчета
+                    }
+                }
+                List<WeaponForConstruction> weaponsforconstructionsorted = WeaponsForConstructionSorting(weaponswithoutblocked); // сортировка оружия по возрастанию урона
                 int weaponindex = weaponsforconstructionsorted.Count-1; // выбираем оружие с наибольшим уроном
                 while (constructionhp > 0)
                 {
@@ -241,8 +262,8 @@ public class Gamemanager : MonoBehaviour
         return SortedList;
     }
     // Update is called once per frame
-    void Update()
+    public void ChangeWeaponsState(Resources_names weaponname)
     {
-        
+        weaponsforconstructionsstate[weaponname] = true;
     }
 }
