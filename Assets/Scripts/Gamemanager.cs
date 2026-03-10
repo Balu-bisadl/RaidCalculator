@@ -50,6 +50,7 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] public List<ResourceSettings> resources_settings;
     [SerializeField] public List<ConstructionSettings> constructions_settings;
     [SerializeField] public List<WeaponSettings> weapon_settings;
+    GameObject lastpanelactivated = null;  
     public Dictionary<Resources_names, bool> weaponsforconstructionsstate = new Dictionary<Resources_names, bool>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -265,5 +266,13 @@ public class Gamemanager : MonoBehaviour
     public void ChangeWeaponsState(Resources_names weaponname)
     {
         weaponsforconstructionsstate[weaponname] = true;
+    }
+    public void changepanelstatus(GameObject currentpanel)
+    {
+        lastpanelactivated = currentpanel;
+    }
+    public void ButtonBack()
+    {
+        lastpanelactivated.SetActive(true);
     }
 }
