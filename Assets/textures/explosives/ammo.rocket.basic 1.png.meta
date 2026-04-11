@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 22bbb9303132759499fae43d3b93d07a
+guid: 7979746086fe35f46a69ddd1ca29526f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4423227596814455594
-    second: ammo.rocket.basic_0
+      213: 7191598647375368544
+    second: ammo.rocket.basic 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,24 +109,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ammo.rocket.basic_0
+      name: ammo.rocket.basic 1_0
       rect:
         serializedVersion: 2
         x: 10
@@ -141,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6dc6b2b9fe98d92c0800000000000000
-      internalID: -4423227596814455594
+      spriteID: 0611df7fdd0bdc360800000000000000
+      internalID: 7191598647375368544
       vertices: []
       indices: 
       edges: []
@@ -161,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ammo.rocket.basic_0: -4423227596814455594
+      ammo.rocket.basic 1_0: 7191598647375368544
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

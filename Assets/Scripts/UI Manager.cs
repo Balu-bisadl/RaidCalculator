@@ -67,8 +67,6 @@ public class UIManager : MonoBehaviour
         {
             Construction_count_input.onValueChanged.AddListener(OnInputChanged);
         }
-        CalculateButtonActivator();
-
     }
 
     // Update is called once per frame
@@ -98,7 +96,7 @@ public class UIManager : MonoBehaviour
             Delete_construction_button.gameObject.SetActive(false);
             Delete_all_construction_button.gameObject.SetActive(true);
         }
-
+        CalculateButtonActivator();
     }
     // ???????? ?????????? ???? ????? ?????????? ?????????? ???????? ???? ???????, ?? ???????? ?????? ?? "????????"
     void Checkitemcountinputactive()
@@ -160,7 +158,7 @@ public class UIManager : MonoBehaviour
             {
                 GameObject selecteditem = Instantiate(Selecteditem_prefab, Selectedpanel.transform);
                 selecteditem.GetComponent<Selecteditem>().Inetialize(item_count, Choose_image.sprite, resource_name,true);
-                CalculateButtonActivator();
+               
             }
         }
         else
@@ -169,9 +167,10 @@ public class UIManager : MonoBehaviour
             {
                 GameObject selected_construction = Instantiate(Selectedconstruction_prefab, Selectedpanel_constructions.transform);
                 selected_construction.GetComponent<Selectedconstruction>().Inetialize(construction_count, Choose_construction_image.sprite, construction_name);
-                CalculateButtonActivator();
+               
             }
         }
+        
     }
     public void Selecteditemchoosed()
     {
@@ -447,21 +446,21 @@ public class UIManager : MonoBehaviour
             Constructions_names construction_name = construction.Construction_name;
             Sprite construction_image = Gamemanager.instance.Get_sprite_for_construction(construction_name);
             GameObject constructionpanel = Instantiate(BaseConstructionPanelprefab, LastResultConstructionsContent);
-            constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count,construction_name); // Доделать
-            weaponsfordestroy.Add(Gamemanager.instance.CalculateweaponsforDestroy(construction_name,construction_count));
+            constructionpanel.GetComponent<BaseConstructionPanel>().Inicialize(construction_image, construction_count, construction_name); // Доделать
+            weaponsfordestroy.Add(Gamemanager.instance.CalculateweaponsforDestroy(construction_name, construction_count));
         }
         // формирование словаря с типами и количеством оружия для уничтожения всех выбранных конструкций
         weaponsfordestroyallconstructions = new Dictionary<WeaponForConstruction, int>();
         foreach (Dictionary<WeaponForConstruction, int> weapons in weaponsfordestroy)
         {
-            foreach(var kvp in weapons)
+            foreach (var kvp in weapons)
             {
                 if (weaponsfordestroyallconstructions.Count > 0)
                 {
                     bool addednewweapon = true;
                     foreach (var kvp2 in weaponsfordestroyallconstructions)
                     {
-                        if(kvp.Key.weapon_name == kvp2.Key.weapon_name)
+                        if (kvp.Key.weapon_name == kvp2.Key.weapon_name)
                         {
                             weaponsfordestroyallconstructions[kvp2.Key] += kvp.Value;
                             addednewweapon = false;
@@ -472,10 +471,10 @@ public class UIManager : MonoBehaviour
                     {
                         weaponsfordestroyallconstructions[kvp.Key] = kvp.Value;
                     }
-                }  
+                }
                 else
                 {
-                    weaponsfordestroyallconstructions[kvp.Key] = kvp.Value; 
+                    weaponsfordestroyallconstructions[kvp.Key] = kvp.Value;
                 }
             }
         }
@@ -490,23 +489,23 @@ public class UIManager : MonoBehaviour
             Dictionary<Resources_names, int> simple_resources = Gamemanager.instance.Get_simple_recources(weaponname);
             int currentresourceminstack = Gamemanager.instance.Get_minstak_for_resource(weaponname);
             int factcount = currentweaponcount / currentresourceminstack;
+
             if (currentweaponcount % currentresourceminstack != 0)
             {
                 factcount += 1;
             }
             foreach (KeyValuePair<Resources_names, int> res in simple_resources)
-            { 
-               if (res.Key == Resources_names.charcoal)
+            {
+                if (res.Key == Resources_names.charcoal)
                 {
-                    Charcoalcount += res.Value*factcount;
+                    Charcoalcount += res.Value * factcount;
                     //надо учитывать minstack при расчете чтобы не добавлял лишнюю пулю
                 }
                 else if (res.Key == Resources_names.sulfur)
                 {
-                    Sulfurcount += res.Value*factcount;
+                    Sulfurcount += res.Value * factcount;
                 }
-            }
-            GameObject currentweaponobject = Instantiate(Selecteditem_prefab, PanelWeaponsForAllConstructionsDestroy);
+            } 
             Sprite currentweaponsprite = null;
             foreach (WeaponSettings weaponsetting in Gamemanager.instance.weapon_settings)
             {
@@ -515,7 +514,23 @@ public class UIManager : MonoBehaviour
                     currentweaponsprite = weaponsetting.weapon_image;
                 }
             }
-            currentweaponobject.GetComponent<Selecteditem>().Inetialize(currentweaponcount, currentweaponsprite, weaponname, true);
+            int countforthisslot = 0;
+            while (currentweaponcount > 0)
+            {
+                GameObject currentweaponobject = Instantiate(Selecteditem_prefab, PanelWeaponsForAllConstructionsDestroy);
+                if (currentweaponcount > 999)
+                {
+                    currentweaponcount -= 999;
+                    countforthisslot = 999;
+                }
+                else
+                {
+                    countforthisslot = currentweaponcount;
+                    currentweaponcount = 0;
+                }
+                    currentweaponobject.GetComponent<Selecteditem>().Inetialize(countforthisslot, currentweaponsprite, weaponname, true);
+            }
+
         }
         CharcoalcountText.text = $"{Charcoalcount}";
         SulfurcountText.text = $"{Sulfurcount}";
